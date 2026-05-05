@@ -6,13 +6,13 @@
     <title>کەش و هەوای هەولێر - OBS Widget</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap');
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
             background: transparent;
@@ -20,7 +20,7 @@
             width: 700px;
             height: 60px;
         }
-
+        
         .weather-line {
             color: #ffffff;
             font-size: 22px;
@@ -32,16 +32,16 @@
             line-height: 36px;
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
-
+        
         .weather-icon {
             margin-left: 6px;
         }
-
+        
         .separator {
             margin: 0 12px;
             color: rgba(255,255,255,0.4);
         }
-
+        
         .loading, .error {
             color: #ffffff;
             font-size: 18px;
@@ -49,7 +49,6 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
     </style>
-<base target="_blank">
 </head>
 <body>
     <div id="weather-widget">
@@ -59,7 +58,7 @@
     <script>
         const LAT = 36.1911;
         const LON = 44.0092;
-
+        
         const weatherCodes = {
             0: { text: 'ئاسمان پاک', icon: '☀️' },
             1: { text: 'زۆرینە پاک', icon: '🌤️' },
@@ -90,25 +89,25 @@
             96: { text: 'ڕەعد و بروسکە بە تاشە بەفر', icon: '⛈️' },
             99: { text: 'ڕەعد و بروسکە بە تاشە بەفر', icon: '⛈️' }
         };
-
+        
         function getWeatherInfo(code) {
             return weatherCodes[code] || { text: 'نەزانراو', icon: '🌡️' };
         }
-
+        
         async function fetchWeather() {
             const widget = document.getElementById('weather-widget');
-
+            
             try {
                 const response = await fetch(
                     `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia/Baghdad`
                 );
-
+                
                 if (!response.ok) throw new Error('هەڵە');
-
+                
                 const data = await response.json();
                 const current = data.current;
                 const info = getWeatherInfo(current.weather_code);
-
+                
                 widget.innerHTML = `
                     <div class="weather-line">
                         📍 هەولێر
@@ -126,8 +125,11 @@
                 widget.innerHTML = `<div class="error">⚠️ ناتوانرێت کەش و هەوا بهێنرێت</div>`;
             }
         }
-
+        
+        // یەکەم بارکردن
         fetchWeather();
+        
+        // خۆکارانە نوێکردنەوە هەر 5 خولەکێک
         setInterval(fetchWeather, 300000);
     </script>
 </body>
